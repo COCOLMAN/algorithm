@@ -1,6 +1,8 @@
-package MonotonicArray
+package golang
 
-import "testing"
+import (
+	"testing"
+)
 
 func Test_isMonotonic(t *testing.T) {
 	type args struct {

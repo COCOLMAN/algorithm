@@ -1,4 +1,4 @@
-package MonotonicArray
+package golang
 
 func isMonotonic(nums []int) bool {
 	if len(nums) <= 2 {
