@@ -5,6 +5,9 @@ import (
 )
 
 func mySqrt(x int) int {
+	if x < 2 {
+		return x
+	}
 	maxN := x
 	minN := 0
 	var n int
