@@ -1,42 +1,32 @@
 package MaxCounters
 
-func max(d map[int]int) int {
-	maxN := 0
-	for key := range d {
-		if d[key] > maxN {
-			maxN = d[key]
-		}
+func max(a, b int) int {
+	if a > b {
+		return a
 	}
-	return maxN
-}
-
-func get(N int, A []int) int {
-	hash := map[int]int{}
-	for idx, a := range A {
-		if a == N+1 {
-			return max(hash) + get(N, A[idx+1:])
-		}
-		if _, ok := hash[a]; !ok {
-			hash[a] = 0
-		}
-		hash[a]++
-	}
-	return max(hash)
+	return b
 }
 
 func Solution(N int, A []int) []int {
+	maxN := 0
 	base := 0
 	answer := make([]int, N)
-	for i := len(A) - 1; i >= 0; i-- {
+	for i := 0; i < len(A); i++ {
 		idx := A[i]
 		if idx == N+1 {
-			base = get(N, A[:i])
-			break
+			base = maxN
+		} else {
+			if answer[idx-1] < base {
+				answer[idx-1] = base
+			}
+			answer[idx-1]++
+			maxN = max(maxN, answer[idx-1])
 		}
-		answer[idx-1]++
 	}
-	for idx, _ := range answer {
-		answer[idx] += base
+	for idx, v := range answer {
+		if v < base {
+			answer[idx] = base
+		}
 	}
 	return answer
 }
