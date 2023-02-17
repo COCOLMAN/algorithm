@@ -16,8 +16,7 @@ func Test_fib(t *testing.T) {
 		{"test 1", args{n: 2}, 1},
 		{"test 1", args{n: 3}, 2},
 		{"test 1", args{n: 4}, 3},
-		{"test 1", args{n: 30}, 3},
-		{"test 1", args{n: 300}, 3},
+		{"test 1", args{n: 50}, 12586269025},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
