@@ -1,32 +1,24 @@
 package SameTree
 
-import (
-	"reflect"
-)
-
 type TreeNode struct {
 	Val   int
 	Left  *TreeNode
 	Right *TreeNode
 }
 
-func getPreorder(node *TreeNode, path []*int) []*int {
-	if node == nil {
-		path = append(path, nil)
-		return path
+func getPreorder(left *TreeNode, right *TreeNode) bool {
+	if left == nil && right == nil {
+		return true
 	}
-	path = append(path, &node.Val)
-	path = getPreorder(node.Left, path)
-	path = getPreorder(node.Right, path)
-	return path
+	if left == nil || right == nil {
+		return false
+	}
+	if left.Val != right.Val {
+		return false
+	}
+	return getPreorder(left.Left, right.Left) && getPreorder(left.Right, right.Right)
 }
 
 func isSameTree(p *TreeNode, q *TreeNode) bool {
-	a := getPreorder(p, []*int{})
-	b := getPreorder(q, []*int{})
-
-	if !reflect.DeepEqual(a, b) {
-		return false
-	}
-	return true
+	return getPreorder(p, q)
 }
