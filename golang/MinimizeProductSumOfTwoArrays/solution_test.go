@@ -28,6 +28,14 @@ func Test_minProductSum(t *testing.T) {
 			},
 			want: 65,
 		},
+		{
+			name: "max num",
+			args: args{
+				nums1: []int{1, 2, 100},
+				nums2: []int{1, 2, 100},
+			},
+			want: 204,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
