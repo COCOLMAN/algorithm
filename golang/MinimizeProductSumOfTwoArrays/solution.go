@@ -1,24 +1,38 @@
 package MinimizeProductSumOfTwoArrays
 
-import (
-	"sort"
-)
-
 func minProductSum(nums1 []int, nums2 []int) int {
-	sort.Slice(nums1, func(i, j int) bool {
-		return nums1[i] < nums1[j]
-	})
-	sort.Slice(nums2, func(i, j int) bool {
-		return nums2[j] < nums2[i]
-	})
+	var nums1Counts [100]int
+	var nums2Counts [100]int
 
-	return productSum(nums1, nums2)
-}
+	idx := 0
+	for idx < len(nums1) {
+		nums1Counts[nums1[idx]-1]++
+		nums2Counts[nums2[idx]-1]++
 
-func productSum(nums1 []int, nums2 []int) int {
-	var result int
-	for i, num1 := range nums1 {
-		result += num1 * nums2[i]
+		idx++
+	}
+
+	result := 0
+
+	num1, num2 := 1, 100
+	for num1 <= 100 && num2 > 0 {
+
+		num1Count := nums1Counts[num1-1]
+		if num1Count == 0 {
+			num1++
+			continue
+		}
+
+		num2Count := nums2Counts[num2-1]
+		if num2Count == 0 {
+			num2--
+			continue
+		}
+
+		result += num1 * num2
+		nums1Counts[num1-1] -= 1
+		nums2Counts[num2-1] -= 1
+
 	}
 	return result
 }
