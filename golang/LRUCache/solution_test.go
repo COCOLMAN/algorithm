@@ -25,6 +25,7 @@ func Test_Simple(t *testing.T) {
 	if c.Get(3) != 4 {
 		t.Errorf("3")
 	}
+	printData(c)
 }
 
 func Test_Capacity(t *testing.T) {

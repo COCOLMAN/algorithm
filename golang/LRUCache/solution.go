@@ -1,5 +1,7 @@
 package LRUCache
 
+import "fmt"
+
 type nodeItem struct {
 	key    int
 	val    int
@@ -12,6 +14,16 @@ type LRUCache struct {
 	capacity int
 }
 
+func printData(cache LRUCache) {
+	result := ""
+	node := cache.head.next
+	for node != nil {
+		result += fmt.Sprintf("%d:%d ", node.key, node.val)
+		node = node.next
+	}
+	fmt.Println(result)
+}
+
 func Constructor(capacity int) LRUCache {
 	return LRUCache{
 		capacity: capacity,
@@ -19,20 +31,32 @@ func Constructor(capacity int) LRUCache {
 	}
 }
 
+func link(front, back *nodeItem) {
+	if back == nil {
+		return
+	}
+	front.next = back
+	back.before = front
+}
+
 func (this *LRUCache) Get(key int) int {
-	node := this.head.next
-	//var beforeNode *nodeItem
-	for node != nil {
-		if node.key == key {
-			return node.val
-			//if beforeNode != nil {
-			//	beforeNode.next = node.next
-			//}
+	node := this.head
+	var targetNode *nodeItem
+	for node.next != nil {
+		if node.next.key == key {
+			targetNode = node.next
+			link(targetNode.before, targetNode.next)
 		}
-		//beforeNode = node
 		node = node.next
 	}
-	return -1
+	if targetNode == nil {
+		return -1
+	}
+	node.next = targetNode
+	targetNode.before = node
+	targetNode.next = nil
+
+	return targetNode.val
 }
 
 func (this *LRUCache) Put(key int, value int) {
