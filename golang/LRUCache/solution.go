@@ -1,9 +1,10 @@
 package LRUCache
 
 type nodeItem struct {
-	key  int
-	val  int
-	next *nodeItem
+	key    int
+	val    int
+	next   *nodeItem
+	before *nodeItem
 }
 
 type LRUCache struct {
@@ -37,9 +38,10 @@ func (this *LRUCache) Get(key int) int {
 func (this *LRUCache) Put(key int, value int) {
 	if this.head.next == nil {
 		this.head.next = &nodeItem{
-			key:  key,
-			val:  value,
-			next: nil,
+			key:    key,
+			val:    value,
+			next:   nil,
+			before: this.head,
 		}
 		return
 	}
@@ -53,7 +55,8 @@ func (this *LRUCache) Put(key int, value int) {
 		node = node.next
 	}
 	node.next = &nodeItem{
-		key: key,
-		val: value,
+		key:    key,
+		val:    value,
+		before: node,
 	}
 }
