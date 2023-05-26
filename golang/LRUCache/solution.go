@@ -7,18 +7,19 @@ type nodeItem struct {
 }
 
 type LRUCache struct {
-	node     *nodeItem
+	head     *nodeItem
 	capacity int
 }
 
 func Constructor(capacity int) LRUCache {
 	return LRUCache{
 		capacity: capacity,
+		head:     &nodeItem{},
 	}
 }
 
 func (this *LRUCache) Get(key int) int {
-	node := this.node
+	node := this.head.next
 	//var beforeNode *nodeItem
 	for node != nil {
 		if node.key == key {
@@ -34,8 +35,8 @@ func (this *LRUCache) Get(key int) int {
 }
 
 func (this *LRUCache) Put(key int, value int) {
-	if this.node == nil {
-		this.node = &nodeItem{
+	if this.head.next == nil {
+		this.head.next = &nodeItem{
 			key:  key,
 			val:  value,
 			next: nil,
@@ -43,7 +44,7 @@ func (this *LRUCache) Put(key int, value int) {
 		return
 	}
 
-	node := this.node
+	node := this.head
 	for node.next != nil {
 		if node.key == key {
 			node.val = value
