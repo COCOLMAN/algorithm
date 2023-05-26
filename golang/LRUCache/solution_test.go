@@ -30,6 +30,25 @@ func Test_Simple(t *testing.T) {
 
 }
 
-func Test_Capacity(t *testing.T) {
-
+func Test_Default1(t *testing.T) {
+	c := Constructor(2)
+	c.Put(1, 1)
+	c.Put(2, 2)
+	if c.Get(1) != 1 {
+		t.Error("error")
+	}
+	c.Put(3, 3)
+	if c.Get(2) != -1 {
+		t.Errorf("error")
+	}
+	c.Put(4, 4)
+	if c.Get(1) != -1 {
+		t.Errorf("error")
+	}
+	if c.Get(3) != 3 {
+		t.Errorf("error")
+	}
+	if c.Get(4) != 4 {
+		t.Errorf("error")
+	}
 }
