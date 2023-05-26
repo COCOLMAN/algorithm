@@ -10,8 +10,9 @@ type nodeItem struct {
 }
 
 type LRUCache struct {
-	head     *nodeItem
-	capacity int
+	head        *nodeItem
+	capacity    int
+	currentSize int
 }
 
 func printData(cache LRUCache) {
@@ -21,13 +22,14 @@ func printData(cache LRUCache) {
 		result += fmt.Sprintf("%d:%d ", node.key, node.val)
 		node = node.next
 	}
-	fmt.Println(result)
+	fmt.Println(result, cache.currentSize)
 }
 
 func Constructor(capacity int) LRUCache {
 	return LRUCache{
-		capacity: capacity,
-		head:     &nodeItem{},
+		capacity:    capacity,
+		currentSize: 0,
+		head:        &nodeItem{},
 	}
 }
 
@@ -61,6 +63,7 @@ func (this *LRUCache) Get(key int) int {
 
 func (this *LRUCache) Put(key int, value int) {
 	if this.head.next == nil {
+		this.currentSize += 1
 		this.head.next = &nodeItem{
 			key:    key,
 			val:    value,
@@ -78,6 +81,7 @@ func (this *LRUCache) Put(key int, value int) {
 		}
 		node = node.next
 	}
+	this.currentSize += 1
 	node.next = &nodeItem{
 		key:    key,
 		val:    value,

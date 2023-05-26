@@ -14,6 +14,7 @@ func Test_Simple(t *testing.T) {
 	if c.Get(2) != 2 {
 		t.Errorf("2")
 	}
+	printData(c)
 	c.Put(1, 3)
 	c.Put(3, 4)
 	if c.Get(1) != 3 {
