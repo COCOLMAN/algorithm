@@ -20,13 +20,14 @@ func Test_Simple(t *testing.T) {
 	if c.Get(1) != 3 {
 		t.Errorf("1")
 	}
-	if c.Get(2) != 2 {
-		t.Errorf("2")
-	}
-	if c.Get(3) != 4 {
-		t.Errorf("3")
+	if c.Get(2) != -1 {
+		t.Error("2", c.Get(2))
 	}
 	printData(c)
+	if c.Get(3) != 4 {
+		t.Error("3", c.Get(3))
+	}
+
 }
 
 func Test_Capacity(t *testing.T) {
