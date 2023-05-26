@@ -52,3 +52,15 @@ func Test_Default1(t *testing.T) {
 		t.Errorf("error")
 	}
 }
+
+func Test_11(t *testing.T) {
+	c := Constructor(1)
+	c.Put(2, 1)
+	if c.Get(2) != 1 {
+		t.Error("error")
+	}
+	c.Put(3, 2)
+	if c.Get(2) != -1 {
+		t.Error("error", c.Get(2))
+	}
+}
