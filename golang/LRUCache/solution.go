@@ -9,15 +9,19 @@ func printCache(c LRUCache) {
 	result := ""
 	node := c.head
 	for node != nil {
-		result += fmt.Sprintf(" %d:%d", node.key, c.values[node.key])
+		result += fmt.Sprintf(" %d:%d", node.key, node.value)
 		node = node.next
 	}
 	fmt.Println(result)
+	if c.head != nil && c.tail != nil {
+		fmt.Println("Head", c.head.key, " Tail:", c.tail.key)
+	}
 	fmt.Println("---------")
 }
 
 type nodeItem struct {
 	key    int
+	value  int
 	next   *nodeItem
 	before *nodeItem
 }
@@ -25,7 +29,7 @@ type nodeItem struct {
 type LRUCache struct {
 	head            *nodeItem
 	tail            *nodeItem
-	values          map[int]int
+	values          map[int]*nodeItem
 	capacity        int
 	currentCapacity int
 }
@@ -36,52 +40,30 @@ func Constructor(capacity int) LRUCache {
 		tail:            nil,
 		capacity:        capacity,
 		currentCapacity: 0,
-		values:          map[int]int{},
+		values:          map[int]*nodeItem{},
 	}
 }
 
 func (this *LRUCache) makeRecently(key int) {
-	if this.head.key == this.tail.key {
-		return
-	}
-	if this.tail.key == key {
-		beforeTail := this.tail
-		if beforeTail.before != nil {
-			beforeTail.before.next = nil
-		}
-		this.tail = beforeTail.before
-
-		beforeHead := this.head
-		this.head = beforeTail
-		beforeTail.before = nil
-		beforeTail.next = beforeHead
-		beforeHead.before = beforeTail
-		return
-	}
+	targetNode := this.values[key]
 	if this.head.key == key {
 		return
 	}
-
-	// this.tail이 바뀌지 않음
-	var targetNode *nodeItem
-	node := this.head
-	for node != nil {
-		if node.key == key {
-			targetNode = node
-			if targetNode.before != nil {
-				targetNode.before.next = targetNode.next
-			}
-			if targetNode.next != nil {
-				targetNode.next.before = targetNode.before
-			}
-		}
-		node = node.next
+	if this.tail.key == key {
+		targetNode.before.next = nil
+		this.tail = targetNode.before
+		targetNode.before = nil
+		this.head.before = targetNode
+		targetNode.next = this.head
+		this.head = targetNode
+		return
 	}
-	beforeHead := this.head
+
+	targetNode.before.next = targetNode.next
+	targetNode.next.before = targetNode.before
+	this.head.before = targetNode
+	targetNode.next = this.head
 	this.head = targetNode
-	targetNode.before = nil
-	targetNode.next = beforeHead
-	beforeHead.before = targetNode
 }
 
 func (this *LRUCache) Get(key int) int {
@@ -90,22 +72,23 @@ func (this *LRUCache) Get(key int) int {
 		return -1
 	}
 	this.makeRecently(key)
-	return val
+	return val.value
 }
 
 func (this *LRUCache) Put(key int, value int) {
 	// if exists key, update value and re-order
 	_, exist := this.values[key]
 	if exist {
-		this.values[key] = value
+		this.values[key].value = value
 		this.makeRecently(key)
 		return
 	}
 
 	newNode := &nodeItem{
-		key: key,
+		key:   key,
+		value: value,
 	}
-	this.values[key] = value
+	this.values[key] = newNode
 	this.currentCapacity++
 	// if empty node, set first node and set head, tail
 	if this.currentCapacity == 1 {
@@ -114,6 +97,7 @@ func (this *LRUCache) Put(key int, value int) {
 		return
 	}
 	// if not exist key, set value and set node
+
 	beforeHead := this.head
 	newNode.next = beforeHead
 	beforeHead.before = newNode

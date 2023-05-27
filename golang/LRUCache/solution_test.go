@@ -1,13 +1,21 @@
 package LRUCache
 
 import (
+	"fmt"
 	"testing"
 )
 
 func Test_Simple(t *testing.T) {
 	c := Constructor(2)
+	printCache(c)
+
 	c.Put(1, 1)
+	printCache(c)
+
 	c.Put(2, 2)
+
+	printCache(c)
+
 	if c.Get(1) != 1 {
 		t.Error("1", c.Get(1))
 	}
@@ -16,10 +24,12 @@ func Test_Simple(t *testing.T) {
 	}
 
 	c.Put(1, 3)
+	printCache(c)
 
 	c.Put(3, 4)
-
+	printCache(c)
 	if c.Get(1) != 3 {
+		fmt.Println(c.values)
 		t.Error("1", c.Get(1))
 	}
 
@@ -59,9 +69,11 @@ func Test_Default1(t *testing.T) {
 func Test_11(t *testing.T) {
 	c := Constructor(1)
 	c.Put(2, 1)
+	printCache(c)
 	if c.Get(2) != 1 {
 		t.Error("error")
 	}
+	printCache(c)
 	c.Put(3, 2)
 	if c.Get(2) != -1 {
 		t.Error("error", c.Get(2))
