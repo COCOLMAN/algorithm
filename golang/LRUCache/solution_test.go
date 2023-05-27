@@ -14,7 +14,7 @@ func Test_Simple(t *testing.T) {
 	if c.Get(2) != 2 {
 		t.Errorf("2")
 	}
-	printData(c)
+
 	c.Put(1, 3)
 	c.Put(3, 4)
 	if c.Get(1) != 3 {
@@ -23,7 +23,7 @@ func Test_Simple(t *testing.T) {
 	if c.Get(2) != -1 {
 		t.Error("2", c.Get(2))
 	}
-	printData(c)
+
 	if c.Get(3) != 4 {
 		t.Error("3", c.Get(3))
 	}
@@ -62,5 +62,39 @@ func Test_11(t *testing.T) {
 	c.Put(3, 2)
 	if c.Get(2) != -1 {
 		t.Error("error", c.Get(2))
+	}
+}
+
+func Test_12(t *testing.T) {
+	c := Constructor(2)
+	c.Put(2, 1)
+	c.Put(2, 2)
+
+	if c.Get(2) != 2 {
+		t.Error("error?", c.Get(2))
+	}
+	c.Put(1, 1)
+	c.Put(4, 1)
+	if c.Get(2) != -1 {
+		t.Error("error")
+	}
+}
+
+func Test_14(t *testing.T) {
+	c := Constructor(2)
+	if c.Get(2) != -1 {
+		t.Error("err", c.Get(2))
+	}
+	c.Put(2, 6)
+	if c.Get(1) != -1 {
+		t.Error("err", c.Get(1))
+	}
+	c.Put(1, 5)
+	c.Put(1, 2)
+	if c.Get(1) != 2 {
+		t.Error("err", c.Get(1))
+	}
+	if c.Get(2) != 6 {
+		t.Error("err", c.Get(2))
 	}
 }

@@ -57,20 +57,10 @@ func (this *LRUCache) Get(key int) int {
 	node.next = targetNode
 	targetNode.before = node
 	targetNode.next = nil
-
 	return targetNode.val
 }
 
 func (this *LRUCache) Put(key int, value int) {
-	if this.capacity == this.currentSize {
-		n := this.head.next
-
-		this.head.next = n.next
-		if n.next != nil {
-			n.next.before = this.head
-		}
-		this.currentSize -= 1
-	}
 
 	if this.head.next == nil {
 		this.currentSize += 1
@@ -83,18 +73,37 @@ func (this *LRUCache) Put(key int, value int) {
 		return
 	}
 
+	var targetNode *nodeItem
 	node := this.head
 	for node.next != nil {
-		if node.key == key {
-			node.val = value
-			return
+		if node.next.key == key {
+			node.next.val = value
+			targetNode = node.next
+			link(targetNode.before, targetNode.next)
 		}
 		node = node.next
 	}
+	if targetNode != nil {
+		node.next = targetNode
+		targetNode.before = node
+		targetNode.next = nil
+		return
+	}
+
 	this.currentSize += 1
 	node.next = &nodeItem{
 		key:    key,
 		val:    value,
 		before: node,
+	}
+
+	if this.capacity < this.currentSize {
+		n := this.head.next
+
+		this.head.next = n.next
+		if n.next != nil {
+			n.next.before = this.head
+		}
+		this.currentSize -= 1
 	}
 }
