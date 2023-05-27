@@ -98,3 +98,27 @@ func Test_14(t *testing.T) {
 		t.Error("err", c.Get(2))
 	}
 }
+
+func Test_Default2(t *testing.T) {
+	c := Constructor(2)
+	if c.Get(2) != -1 {
+		t.Error("err", c.Get(2))
+	}
+	c.Put(2, 6)
+	if c.Get(1) != -1 {
+		t.Error("err", c.Get(1))
+	}
+	c.Put(1, 5)
+	c.Put(1, 2)
+	if c.Get(1) != 2 {
+		t.Error("err", c.Get(1))
+	}
+	c.Put(2, 4)
+	if c.Get(2) != 4 {
+		t.Error("err", c.Get(2))
+	}
+	c.Put(3, 5)
+	if c.Get(1) != -1 {
+		t.Error("err", c.Get(1))
+	}
+}
