@@ -55,3 +55,51 @@ func Test_deleteAndEarn(t *testing.T) {
 		})
 	}
 }
+
+func Test_max(t *testing.T) {
+	type args struct {
+		a int
+		b int
+		c int
+	}
+	tests := []struct {
+		name string
+		args args
+		want int
+	}{
+		{
+			name: "1",
+			args: args{
+				a: 1,
+				b: 3,
+				c: 5,
+			},
+			want: 5,
+		},
+		{
+			name: "2",
+			args: args{
+				a: 3,
+				b: 5,
+				c: 1,
+			},
+			want: 5,
+		},
+		{
+			name: "1",
+			args: args{
+				a: 5,
+				b: 1,
+				c: 3,
+			},
+			want: 5,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := max(tt.args.a, tt.args.b, tt.args.c); got != tt.want {
+				t.Errorf("max() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
