@@ -1,41 +1,18 @@
 package UniquePaths
 
-import "fmt"
-
-type Cache struct {
-	data map[string]int
-}
-
-var cache Cache
-
-func (c *Cache) set(m, n, val int) {
-	c.data[fmt.Sprintf("%d:%d", m, n)] = val
-}
-
-func (c *Cache) get(m, n int) (int, bool) {
-	val, exist := c.data[fmt.Sprintf("%d:%d", m, n)]
-	return val, exist
-}
-
-func cal(m int, n int) int {
-	if val, exist := cache.get(m, n); exist {
-		return val
-	}
-	if m == 0 || n == 0 {
-		return 1
-	}
-	a := cal(m-1, n)
-	cache.set(m-1, n, a)
-	b := cal(m, n-1)
-	cache.set(m, n-1, b)
-	return a + b
-}
-
 func uniquePaths(m int, n int) int {
-	cache = Cache{
-		data: map[string]int{},
+	path := make([][]int, m)
+	for i := 0; i < m; i++ {
+		row := make([]int, n)
+		for i := range row {
+			row[i] = 1
+		}
+		path[i] = row
 	}
-	m = m - 1
-	n = n - 1
-	return cal(m, n)
+	for i := 1; i < m; i++ {
+		for j := 1; j < n; j++ {
+			path[i][j] = path[i-1][j] + path[i][j-1]
+		}
+	}
+	return path[m-1][n-1]
 }

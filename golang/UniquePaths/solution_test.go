@@ -29,6 +29,30 @@ func Test_uniquePaths(t *testing.T) {
 			want: 3,
 		},
 		{
+			name: "min size test",
+			args: args{
+				m: 1,
+				n: 1,
+			},
+			want: 1,
+		},
+		{
+			name: "small size test",
+			args: args{
+				m: 2,
+				n: 1,
+			},
+			want: 1,
+		},
+		{
+			name: "4x4 size test",
+			args: args{
+				m: 4,
+				n: 4,
+			},
+			want: 20,
+		},
+		{
 			name: "max size test",
 			args: args{
 				m: 100,
