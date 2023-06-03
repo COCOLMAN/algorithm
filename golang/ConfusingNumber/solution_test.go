@@ -32,6 +32,27 @@ func Test_confusingNumber(t *testing.T) {
 			},
 			want: false,
 		},
+		{
+			name: "addtional",
+			args: args{
+				n: 199999990,
+			},
+			want: true,
+		},
+		{
+			name: "addtional",
+			args: args{
+				n: 199999992,
+			},
+			want: false,
+		},
+		{
+			name: "addtional",
+			args: args{
+				n: 199999992,
+			},
+			want: false,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
