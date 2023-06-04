@@ -42,6 +42,17 @@ func Test_maxDistance(t *testing.T) {
 			},
 			want: 4,
 		},
+		{
+			name: "add",
+			args: args{
+				arrays: [][]int{
+					{-1, 1},
+					{-3, 1, 4},
+					{-2, -1, 0, 2},
+				},
+			},
+			want: 6,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
