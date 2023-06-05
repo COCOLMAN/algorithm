@@ -2,27 +2,24 @@ package ClimbingStairs
 
 var cache map[int]int
 
-func cal(n int) int {
-	if n == 0 {
+func cal(n, current int) int {
+	if n == current {
 		return 1
 	}
-	if n == 1 {
-		return 1
-	}
-	if n == 2 {
-		return 2
+	if n < current {
+		return 0
 	}
 
-	if v, exist := cache[n]; exist {
+	if v, exist := cache[current]; exist {
 		return v
 	}
 
-	result := cal(n-1) + cal(n-2)
-	cache[n] = result
+	result := cal(n, current+1) + cal(n, current+2)
+	cache[current] = result
 	return result
 }
 
 func climbStairs(n int) int {
 	cache = map[int]int{}
-	return cal(n)
+	return cal(n, 0)
 }
