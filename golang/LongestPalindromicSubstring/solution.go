@@ -1,54 +1,46 @@
 package LongestPalindromicSubstring
 
-func check(s string, cache *map[string]bool) bool {
-	if v, exist := (*cache)[s]; exist {
-		return v
+func searchPalindromeFromIdx(s string, left, right int) string {
+	if len(s) == 0 {
+		return ""
 	}
-	if len(s) == 1 {
-		return true
-	}
-	if len(s) <= 3 {
-		return s[0] == s[len(s)-1]
-	}
-	i := 0
-	j := len(s) - 1
-
-	for i < j {
-		if s[i] != s[j] {
-			(*cache)[s] = false
-			return false
+	diff := 0
+	maxPalindrome := s[0:1]
+	for left-diff >= 0 && right+diff <= len(s)-1 {
+		if s[left-diff] != s[right+diff] {
+			break
 		}
-		i++
-		j--
+		maxPalindrome = s[left-diff : right+diff+1]
+		diff++
 	}
-	(*cache)[s] = true
-	return true
-}
-
-func ggg(s string, cache *map[string]bool, cache2 *map[string]string) string {
-	if v, exist := (*cache2)[s]; exist {
-		return v
-	}
-	i := 0
-	j := len(s)
-
-	if check(s[i:j], cache) {
-		r := s[i:j]
-		(*cache2)[s] = r
-		return r
-	}
-	a := ggg(s[i+1:j], cache, cache2)
-	b := ggg(s[i:j-1], cache, cache2)
-	if len(a) > len(b) {
-		(*cache2)[s] = a
-		return a
-	}
-	(*cache2)[s] = b
-	return b
+	return maxPalindrome
 }
 
 func longestPalindrome(s string) string {
-	cache := map[string]bool{}
-	cache2 := map[string]string{}
-	return ggg(s, &cache, &cache2)
+	if len(s) == 1 {
+		return s
+	}
+	if len(s) == 2 {
+		if s[0] == s[1] {
+			return s
+		} else {
+			return s[0:1]
+		}
+	}
+	maxPalindrome := ""
+	for i := 0; i <= len(s)-2; i++ {
+		currentPalindrome1 := searchPalindromeFromIdx(s, i, i+1)
+		currentPalindrome2 := searchPalindromeFromIdx(s, i-1, i+1)
+		currentPalindrome := ""
+		if len(currentPalindrome1) > len(currentPalindrome2) {
+			currentPalindrome = currentPalindrome1
+		} else {
+			currentPalindrome = currentPalindrome2
+		}
+		if len(currentPalindrome) > len(maxPalindrome) {
+			maxPalindrome = currentPalindrome
+		}
+	}
+
+	return maxPalindrome
 }
