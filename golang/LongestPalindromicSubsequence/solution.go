@@ -1,48 +1,28 @@
 package LongestPalindromicSubsequence
 
-import "fmt"
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
-}
-
-func search(s string, left, right, size int) int {
-
-	if left < 0 || right >= len(s) {
-		return size
-	}
-	if s[left] == s[right] {
-		size++
-	}
-
-	result := max(
-		search(s, left-1, right, size),
-		search(s, left, right+1, size),
-	)
-	return result
-}
+var cache map[string]int
 
 func longestPalindromeSubseq(s string) int {
-	maxVal := 0
-	fmt.Println(s, s[:len(s)-1])
-	for idx, _ := range s[:len(s)-1] {
-
-		var a, b int
-		a = search(s, idx, idx, 0)
-		fmt.Println(idx, idx, ":", a)
-		if s[idx] == s[idx+1] {
-			b = search(s, idx, idx+1, 1)
-			fmt.Println(idx, idx+1, b)
-		}
-
-		val := max(a, b)
-		if val > maxVal {
-			maxVal = val
-		}
-		fmt.Println(s, idx, val)
+	if cache == nil {
+		cache = map[string]int{}
+	} else if val, exist := cache[s]; exist {
+		return val
 	}
-	return maxVal
+
+	if len(s) < 2 {
+		return len(s)
+	}
+
+	if s[0] == s[len(s)-1] {
+		cache[s] = 2 + longestPalindromeSubseq(s[1:len(s)-1])
+		return cache[s]
+	}
+	a := longestPalindromeSubseq(s[1:len(s)])
+	b := longestPalindromeSubseq(s[0 : len(s)-1])
+	if a > b {
+		cache[s] = a
+	} else {
+		cache[s] = b
+	}
+	return cache[s]
 }
