@@ -39,6 +39,13 @@ func Test_longestPalindromeSubseq(t *testing.T) {
 			},
 			want: 10,
 		},
+		{
+			name: "additional",
+			args: args{
+				s: "bbaaaasdfasfkjwkfjaskdfjasdf923423asdkfjsakfjxvzxcvxzaaabbbbaaaasdfasfkjwkfjaskdfjasdf923423asdkfjsakfjxvzxcvxzaaabb",
+			},
+			want: 10,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
