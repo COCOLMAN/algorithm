@@ -29,6 +29,13 @@ func Test_missingNumber(t *testing.T) {
 			},
 			want: 14,
 		},
+		{
+			name: "additional",
+			args: args{
+				arr: []int{1, 1, 1},
+			},
+			want: 1,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
