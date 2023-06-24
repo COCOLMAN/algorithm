@@ -59,7 +59,7 @@ func Test_findMissingRanges(t *testing.T) {
 				lower: -1000000000,
 				upper: 1000000000,
 			},
-			want: [][]int{},
+			want: [][]int{{-999999999, 999999999}},
 		},
 	}
 	for _, tt := range tests {
