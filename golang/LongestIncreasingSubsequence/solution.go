@@ -1,47 +1,62 @@
 package LongestIncreasingSubsequence
 
-import "fmt"
-
-func cal(currentNum, cursor, currentSize int, nums []int) int {
-	fmt.Println(currentNum, cursor, currentSize, nums)
-	if cursor >= len(nums) {
-		return currentSize
-	}
-
-	var a, b int
-	if currentNum < nums[cursor] {
-		a = cal(nums[cursor], cursor+1, currentSize+1, nums)
-	}
-	b = cal(currentNum, cursor+1, currentSize, nums)
-	return max(a, b)
-}
-
-func max(a int, b int) int {
+func max(a, b int) int {
 	if a > b {
 		return a
 	}
 	return b
 }
 
-func lengthOfLIS(nums []int) int {
-	if len(nums) == 1 {
-		return 1
+func cal(currentNum int, currentSize int, nums, accum []int) int {
+	//fmt.Println(currentNum, currentSize, nums, accum)
+	if len(nums) == 0 {
+		return currentSize
 	}
-	maxResult := 0
+	first := true
+	for idx, num := range nums {
+		if num > currentNum {
+			if !first && (num == accum[len(accum)-1]) {
+				break
+			}
 
-	for idx, _ := range nums {
-		var a int
-		if idx < len(nums)-1 {
-			a = max(
-				cal(nums[idx], idx+1, 1, nums),
-				cal(nums[idx+1], idx+2, 1, nums),
+			first = false
+
+			return max(
+				cal(num, currentSize+1, nums[idx+1:], accum[idx+1:]),
+				cal(currentNum, currentSize, nums[idx+1:], accum[idx+1:]),
 			)
-		} else {
-			a = cal(nums[idx], idx+1, 1, nums)
-		}
-		if maxResult < a {
-			maxResult = a
 		}
 	}
-	return maxResult
+	return currentSize
+}
+
+func lengthOfLIS(nums []int) int {
+	//fmt.Println(nums)
+	accumNums := []int{nums[0]}
+	for idx, num := range nums {
+		if idx == 0 {
+			continue
+		}
+		if num > accumNums[len(accumNums)-1] {
+			accumNums = append(accumNums, num)
+		} else {
+			accumNums = append(accumNums, accumNums[len(accumNums)-1])
+		}
+	}
+	//fmt.Println(accumNums)
+	maxSize := cal(nums[0], 1, nums[1:], accumNums[1:])
+	smallerNum := nums[0]
+
+	for idx, num := range nums {
+		if smallerNum <= num {
+			continue
+		} else {
+			smallerNum = num
+		}
+		a := cal(num, 1, nums[idx+1:], accumNums[idx+1:])
+		if a > maxSize {
+			maxSize = a
+		}
+	}
+	return maxSize
 }
