@@ -1,9 +1,10 @@
 package MovingAverageFromDataStream
 
 type MovingAverage struct {
-	size    int
-	total   int
-	numbers []int
+	size      int
+	total     int
+	insertIdx int
+	numbers   []int
 }
 
 func Constructor(size int) MovingAverage {
@@ -18,9 +19,12 @@ func (this *MovingAverage) Next(val int) float64 {
 		this.total += val
 		this.numbers = append(this.numbers, val)
 	} else {
-		lastVal := this.numbers[0]
-		this.numbers = this.numbers[1:]
-		this.numbers = append(this.numbers, val)
+		lastVal := this.numbers[this.insertIdx]
+		this.numbers[this.insertIdx] = val
+		this.insertIdx++
+		if this.insertIdx == this.size {
+			this.insertIdx = 0
+		}
 		this.total -= lastVal
 		this.total += val
 	}
